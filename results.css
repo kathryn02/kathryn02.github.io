@@ -51,6 +51,9 @@ ul.posts {
 ul.posts li {
     list-style: none;
 }
+results {
+    display: inline;
+}
 ul {
     padding-left:14px;
     margin-top:-6px;
@@ -62,7 +65,7 @@ ul {
     width:200px;
     position: relative;
 }
-#borderLeft {
+#borderRight {
     border-right: 2px solid #f51c40;
     margin: 5px;
 }
