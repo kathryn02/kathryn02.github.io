@@ -57,8 +57,9 @@ ul.posts {
 ul.posts li {
     list-style: none;
 }
-#results {
-    display: inline;
+#results ol {
+    float: left;
+    margin-right: 12px;
 }
 ul {
     padding-left:14px;
