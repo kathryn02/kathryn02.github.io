@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>My first JavaScript page</title>
+  </head>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.4/jquery.min.js"></script>
+    <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/oauth.js"></script>
+    <script type="text/javascript" src="http://oauth.googlecode.com/svn/code/javascript/sha1.js"></script>
+
+  <body>
+    <h1>Budget Beer</h1>
+    <p>Input city name</p>
+
+    <input id="textbox" type="text" />
+    <button id="buttonSearch" onclick="search()">Search</button>
+
+
+    <script type="text/javascript">
+
+    function test(t) {
+      alert(t);
+    }
+
+    function search() {
+      var auth = {
+          consumerKey: 'jpRGb46Cuy-dZ47dbzfoWQ',
+          consumerSecret: 'jnDPUIHGqLvDIjxgwyqKwlgzmnU',
+          accessToken: 'XNWzHcvPUa3-xyikajnKrrt3KRjum42G',
+          accessTokenSecret: 'R9ai_0TmPbnpp16fEaeNfFs7hQQ',
+          serviceProvider : {
+              signatureMethod : "HMAC-SHA1"
+          }
+      };
+
+      var terms = 'bar';
+      var near = document.getElementById('textbox').value;
+      //var near = 'College+Station';
+
+      var accessor = {
+          consumerSecret : auth.consumerSecret,
+          tokenSecret : auth.accessTokenSecret
+      };
+
+      parameters = [];
+      parameters.push(['term', terms]);
+      parameters.push(['location', near]);
+      parameters.push(['callback', 'cb']);
+      parameters.push(['oauth_consumer_key', auth.consumerKey]);
+      parameters.push(['oauth_consumer_secret', auth.consumerSecret]);
+      parameters.push(['oauth_token', auth.accessToken]);
+      parameters.push(['oauth_signature_method', auth.serviceProvider.signatureMethod]);
+
+      var message = {
+          'action' : 'http://api.yelp.com/v2/search',
+          'method' : 'GET',
+          'parameters' : parameters
+      };
+
+      OAuth.setTimestampAndNonce(message);
+      OAuth.SignatureMethod.sign(message, accessor);
+
+      var parameterMap = OAuth.getParameterMap(message.parameters);
+
+      $.ajax({
+          'url' : message.action,
+          'data' : parameterMap,
+          'dataType' : 'jsonp',
+          'jsonpCallback' : 'cb',
+          'success' : function(data, textStats, XMLHttpRequest) {
+              var temp = data.businesses;
+              var info = get_data(temp);
+              for(i = 0; i < info.length; ++i) {
+              $("body").append("<br> <a href=\"" + info[i].url + "\">" + info[i].name + "</a> -----> " 
+                + info[i].rating + " -----> " + info[i].address[0] + " " + info[i].address[1]);
+              }
+          }
+      });
+    }
+
+      function get_data(bars) {
+        var data = [];
+        for(i = 0; i < bars.length; ++i) {
+          var test = {name:"", rating:0, latitude:0, longitude:0, address:[], url:""}
+          test.name = bars[i].name;
+          test.rating = bars[i].rating;
+          test.latitude = bars[i].location.coordinate.latitude;
+          test.longitude = bars[i].location.coordinate.longitude;
+          test.address = bars[i].location.display_address;
+          test.url = bars[i].url;
+          data.push(test);
+        }
+        return data;
+      }    
+    </script>
+
+  </body>
+</html>
