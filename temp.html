@@ -14,15 +14,101 @@
     <input id="textbox" type="text" />
     <button id="buttonSearch" onclick="search()">Search</button>
 
+<!----css---------------css-------------->
 <style>
+@import "compass/css3";
+
 body {
     margin: 60px auto;
     width: 70%;
     background-image: url("beer_texture.jpg");
     background-size: 100%;
 }
+nav ul, footer ul {
+    font-size: 1.5em;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+    padding: 0px;
+    list-style: none;
+    font-weight: bold;
+}
+nav ul li, footer ul li {
+    display: inline;
+    margin-left: 20px;
+}
+a {
+    text-decoration: none;
+    color: black;
+}
+a:hover {
+    text-decoration: underline;
+}
+h1 {
+    font-size: 4em;
+    font-family:'Helvetica', 'Arial', 'Sans-Serif';
+}
+
+h2 {
+	font-size: 3em;
+	font-family:'Helvetica', 'Arial', 'Sans-Serif';
+}
+
+h3 {
+	font-size: 2em;
+	font-family:'Helvetica', 'Arial', 'Sans-Serif';
+	margin-top: 30px;
+	
+}
+p {
+    font-size: 1.5em;
+    line-height: 1.4em;
+    color: #333;
+}
+footer {
+    border-top: 2px solid black;
+    font-size: .8em;
+    margin: 20px;
+}
+
+ul.posts { 
+    margin: 20px auto 40px; 
+    font-size: 1.5em;
+}
+
+ul.posts li {
+    list-style: none;
+}
+.results {
+    display: flex;
+}
+.results > div{
+	flex: 1;
+}
+
+.results li{
+	font-size: 1.5em;
+    	font-family:'Helvetica', 'Arial', 'Sans-Serif';
+}
+ul {
+    padding-left:14px;
+    margin-top:-6px;
+    margin-bottom:-6px;
+    padding-bottom:0;
+}
+#mainDiv {
+    height: 200px;
+    width:200px;
+    position: relative;
+}
+#borderRight {
+    border-right: 2px solid black;
+    margin: 5px;
+}
 
 </style>
+
+
+<!--------------------- JAVASCRIPT --------------------------JAVASCRIPT---------------------->
+
     <script type="text/javascript">
 
     function test(t) {
