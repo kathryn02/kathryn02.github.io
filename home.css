@@ -4,8 +4,6 @@ body {
     margin: 60px auto;
     width: 70%;
     background-image: url("beer_texture.jpg");
-    background-size: 100%;
-    background: no-repeat;
 }
 
 /***********************
