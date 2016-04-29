@@ -100,15 +100,14 @@
                 var rank = get_rank(info, 30.6280, -96.334);
 
                 for(i = 0; i < info.length; ++i) {
-                  $("body").append("<br>" + info[i].price);
-                /*
+                //  $("body").append("<br>" + info[i].price);
                   $("body").append("<br><a href=\"" + info[i].url + "\">" + info[i].name + "</a> -----> " 
                     + info[i].rating + " -----> " + info[i].address[0] + " " + info[i].address[1]);
-                */
                 }
+                $("body").append("<br>");
                 for(i = 0; i < 5; ++i) {
-                  $("body").append("<br>" + i + ". <a href=\"" + rank[i].url + "\">" + rank[i].name + "</a> -----> " /*+ scores[l]*/
-                    + rank[i].rating + " -----> " + rank[i].address[0] + " " + rank[i].address[1] + " ++++ " + rank[i].score);
+                  $("body").append("<br>" + i + ". <a href=\"" + rank[i].url + "\">" + rank[i].name + "</a> -----> "
+                    + rank[i].price);
                 }
             }
         });
@@ -125,7 +124,7 @@
           temp.longitude = bars[i].location.coordinate.longitude;
           temp.address = bars[i].location.display_address;
           temp.url = bars[i].url;
-          temp.price = (Math.random() * 2) + 2;
+          temp.price = (Math.random() * 2);
           data.push(temp);
         }
         return data;
@@ -161,20 +160,18 @@
           sorted[j] += Math.cos((bars[j].rating - avgStars)/avgStars);
         }
 
-        /*
         // account for price
         for(k = 0; k < bars.length; ++k) {
           scores[k] += bars[k].price/avgPrice;
           sorted[k] += bars[k].price/avgPrice;
         }
-        */
         sorted.sort();
 
         // sort out final list
         for(k = 1; k < 6; ++k) {
           for(l = 0; l < bars.length; ++l) {
             if(sorted[k] == scores[l])
-              bars[l].score = sorted[k];
+              bars[l].price = sorted[k];
               data.push(bars[l]);
           }
         }
