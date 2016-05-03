@@ -130,8 +130,18 @@
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
                 //var info = get_data(data.businesses);
+                //jQuery(document).ready(function($) {
+                  //      alert("Your location is: " + geoplugin_countryName() + ", " + geoplugin_region() + ", " + geoplugin_city());
+                //});
+
                 jQuery(document).ready(function($) {
-                        alert("Your location is: " + geoplugin_countryName() + ", " + geoplugin_region() + ", " + geoplugin_city());
+                    jQuery.getScript('http://www.geoplugin.net/javascript.gp', function() 
+                {
+                    var country = geoplugin_countryName();
+                    var zone = geoplugin_region();
+                    var district = geoplugin_city();
+                    console.log("Your location is: " + country + ", " + zone + ", " + district);
+                });
                 });
                 //var rank = get_rank(info, 30.594659, -96.327024);
                 //position.coords.latitude
