@@ -13,7 +13,7 @@
         border-color: black;
         border-radius: 35px; /* (height/2) + border-width */
         border-style: solid;
-	border-width: 5px;
+        border-width: 5px;
         color: black;
         padding: 15px 32px;
         text-align: center;
@@ -24,36 +24,71 @@
         margin: 4px 2px;
         cursor: pointer;
         border-radius: 12px;
-        margin-top: -80px;
+        margin-top: -70px;
         margin-left: 1025px;
         position: fixed;
+    }
+    table {
+        border-radius: 15px;
+    }
+    td {
+        border-radius: 10px;
+    }
+    img {
+        border-radius: 10px;
+    }
+    html * {
+        font-family: Tahoma;
+        color: black;
     }
     </style>
   </head>
 
   <body>
+    <nav>
+      <ul>
+        <li><a href="temp.html">New Search</a></li>
+      </ul>
+    </nav>
     <div class="container">
     <div class="blurb">
       <h1>Budget Beer</h1>
 
     </div><!-- /.blurb -->
     </div><!-- /.container -->
+
     <footer>
-            <h2>Enter City or Zip:</h2>
-            <div class="flexsearch">
-                    <div class="flexsearch--wrapper">
-                            <form class="flexsearch--form" action="#" method="post">
-                                    <div class="flexsearch--input-wrapper">
-                                            <input id="textbox" class="flexsearch--input" type="search" placeholder="input">
-                                    </div>
-                            </form>
-                            <button id="buttonSearch" class="button" onclick="search()">Search</button>
-                    </div>
+      <h2>Enter City or Zip:</h2>
+      <div class="flexsearch">
+        <div class="flexsearch--wrapper">
+          <form class="flexsearch--form" action="#" method="post">
+            <div class="flexsearch--input-wrapper">
+              <input id="textbox" class="flexsearch--input" type="search" placeholder="input">
             </div>
+          </form>
+          <button id="buttonSearch" class="button" onclick="search()">Search</button>
+        </div>
+      </div>
     </footer>
     <footer></footer>
 
 
+    <h3 align="center"><u>RESULTS</u></h3>
+    <table class="standard" align="center" cellpadding="10px" style="background: rgba(196,196,196,0.85);">
+      <thead>
+        <tr>
+          <td><b>Rank</b></td>
+          <td><b>Name</b></td>
+          <td><b>Stars</b></td>
+          <td><b>Address</b></td>
+          <td><b>Price</b></td>
+          <td><b>Score</b></td>
+          <td><b>Distance</b></td>
+        </tr>
+      </thead>
+      <tbody id="tab">
+      </tbody>
+    </table>
 
     <script type="text/javascript">
 
@@ -102,41 +137,45 @@
             'dataType' : 'jsonp',
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
-                var temp = data.businesses;
-                var info = get_data(temp);
-                var rank = get_rank(info, 30.6280, -96.334);
+                var info = get_data(data.businesses);
+                //var locate = get_location();
+                var rank = get_rank(info, 30.594659, -96.327024);
+                //position.coords.latitude
+                //position.coords.longitude
+                
+                var place;
+                for(i = 0; i < rank.length; ++i) {
+                  rank[i].price = rank[i].price.toFixed(2);
+                  place = i + 1;
+                  rank[i].dis = get_distance(rank[i].latitude, rank[i].longitude, 30.594659, -96.327024).toFixed(2);
 
-                for(i = 0; i < info.length; ++i) {
-                //  $("body").append("<br>" + info[i].price);
-                  $("body").append("<br><a href=\"" + info[i].url + "\">" + info[i].name + "</a> -----> " 
-                    + info[i].rating + " -----> " + info[i].address[0] + " " + info[i].address[1]);
-                }
-                $("body").append("<br>");
-                for(i = 0; i < 5; ++i) {
-                  $("body").append("<br>" + i + ". <a href=\"" + rank[i].url + "\">" + rank[i].name + "</a> -----> "
-                    + rank[i].price);
+                  $('#tab').append("<tr><td><b>" + place + "</b></td><td><u><a href=\"" + rank[i].url + "\">" + rank[i].name + "</a><u></td><td>"
+                    + rank[i].rating + "</td><td>" + rank[i].address[0] + " " + rank[i].address[1] + "</td><td> $"
+                    + rank[i].price + "</td><td>" + rank[i].score + "</td><td>" + rank[i].dis + " mi.</td></tr>");
                 }
             }
         });
       }
     
 
+      /* get data */
       function get_data(bars) {
         var data = [];
         for(i = 0; i < bars.length; ++i) {
-          var temp = {name:"", rating:0, latitude:0, longitude:0, address:[], url:"",price:0.0,score:0.0}
+          var temp = {name:"", rating:0, latitude:0, longitude:0, address:[], url:"", price:0.0, score:0.0, dis:0.0}
           temp.name = bars[i].name;
           temp.rating = bars[i].rating;
           temp.latitude = bars[i].location.coordinate.latitude;
           temp.longitude = bars[i].location.coordinate.longitude;
           temp.address = bars[i].location.display_address;
           temp.url = bars[i].url;
-          temp.price = (Math.random() * 2);
+          temp.price = ((Math.random() * 2) + 3);
           data.push(temp);
         }
         return data;
       }    
 
+      /* get rank */
       function get_rank(bars, currLat, currLon) {
         var scores = [];
         var sorted = [];
@@ -146,6 +185,7 @@
         var avgPrice = 0.0;
 
         var data = [];
+
         // get difference in location
         var temp = 0.0;
         for(i = 0; i < bars.length; ++i) {
@@ -161,30 +201,84 @@
         avgStars = totalStars/bars.length;
         avgPrice = sumPrice/bars.length;
 
+        
         // take avg star rating and get relative value
         for(j = 0; j < bars.length; ++j) {
           scores[j] += Math.cos((bars[j].rating - avgStars)/avgStars);
           sorted[j] += Math.cos((bars[j].rating - avgStars)/avgStars);
         }
+        
 
+        
         // account for price
         for(k = 0; k < bars.length; ++k) {
           scores[k] += bars[k].price/avgPrice;
           sorted[k] += bars[k].price/avgPrice;
         }
-        sorted.sort();
+        
 
+        
         // sort out final list
-        for(k = 1; k < 6; ++k) {
+        sorted.sort();
+        for(k = 0; k < 5; ++k) {
           for(l = 0; l < bars.length; ++l) {
-            if(sorted[k] == scores[l])
-              bars[l].price = sorted[k];
+            if(sorted[k] == scores[l]) {
+              bars[l].score = sorted[k];
               data.push(bars[l]);
+            }
           }
         }
+        
 
         return data;
       }
-    </script>
+
+      /* get distance */
+      function get_distance(lat1, lon1, lat2, lon2) {
+        var R = 6371000; // meters
+        var p1 = lat1.toRad();
+        var p2 = lat2.toRad();
+        var dp = (lat2-lat1).toRad();
+        var dl = (lon2-lon1).toRad();
+
+        var a = Math.sin(dp/2) * Math.sin(dp/2) +
+                Math.cos(p1) * Math.cos(p2) *
+                Math.sin(dl/2) * Math.sin(dl/2);
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+
+        var d = R * c;
+
+        return d * 0.000621371;
+      }
+
+      if (typeof(Number.prototype.toRad) === "undefined") {
+        Number.prototype.toRad = function() {
+          return this * Math.PI / 180;
+        }
+      }
+
+      var options = {
+        enableHighAccuracy: true,
+        timeout: 5000,
+        maximumAge: 0
+      };
+
+      function suc(pos) {
+        var crd = pos.coords;
+
+        console.log('Your current position is:');
+        console.log('Latitude : ' + crd.latitude);
+        console.log('Longitude: ' + crd.longitude);
+        console.log('More or less ' + crd.accuracy + ' meters.');
+      };
+
+      function error(err) {
+        console.warn('ERROR(' + err.code + '): ' + err.message);
+      };
+
+      function get_location() {
+        return navigator.geolocation.getCurrentPosition(suc, error, options);
+      }
+   </script>
   </body>
 </html>
