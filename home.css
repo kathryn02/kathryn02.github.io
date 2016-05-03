@@ -38,7 +38,7 @@ body {
  * Configurable Styles *
  ***********************/
 .flexsearch {
-  padding: 0 25px 0 25px; /* Padding for other horizontal elements */
+  padding: 0 25px 0 20px; /* Padding for other horizontal elements */
 }
 
 .flexsearch--input {
