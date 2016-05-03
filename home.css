@@ -13,7 +13,7 @@ body {
 .flexsearch--wrapper {
 	height: auto;
 	width: auto;
-	max-width: 100%;
+	max-width: 90%;
 	overflow: hidden;
 	background: transparent;
 	margin: 0;
