@@ -130,7 +130,9 @@
             'jsonpCallback' : 'cb',
             'success' : function(data, textStats, XMLHttpRequest) {
                 //var info = get_data(data.businesses);
-                var locate = get_location();
+                jQuery(document).ready(function($) {
+                        alert("Your location is: " + geoplugin_countryName() + ", " + geoplugin_region() + ", " + geoplugin_city());
+                });
                 //var rank = get_rank(info, 30.594659, -96.327024);
                 //position.coords.latitude
                 //position.coords.longitude
