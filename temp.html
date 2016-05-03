@@ -25,7 +25,7 @@
         cursor: pointer;
         border-radius: 12px;
         margin-top: -70px;
-        margin-left: 1025px;
+        margin-left: 825px;
         position: fixed;
     }
     table {
@@ -139,13 +139,13 @@
             'success' : function(data, textStats, XMLHttpRequest) {
                 var info = get_data(data.businesses);
                 //var locate = get_location();
-                var rank = get_rank(info, 30.594659, -96.327024);
+                var rank = get_rank(info, 30.620888, -96.341669);
                 
                 var place;
                 for(i = 0; i < rank.length; ++i) {
                   rank[i].price = rank[i].price.toFixed(2);
                   place = i + 1;
-                  rank[i].dis = get_distance(rank[i].latitude, rank[i].longitude, 30.594659, -96.327024).toFixed(2);
+                  rank[i].dis = get_distance(rank[i].latitude, rank[i].longitude, 30.620888, -96.341669).toFixed(2);
 
                   $('#tab').append("<tr><td><b>" + place + "</b></td><td><u><a href=\"" + rank[i].url + "\">" + rank[i].name + "</a><u></td><td>"
                     + rank[i].rating + "</td><td>" + rank[i].address[0] + " " + rank[i].address[1] + "</td><td> $"
@@ -190,8 +190,8 @@
           // distance formula
           temp = (currLat - bars[i].latitude) * (currLat - bars[i].latitude);
           temp += (currLon - bars[i].longitude) * (currLon - bars[i].longitude);
-          scores.push(0.4 * Math.sqrt(temp));
-          sorted.push(0.4 * Math.sqrt(temp));
+          scores.push(0.3 * Math.sqrt(temp));
+          sorted.push(0.3 * Math.sqrt(temp));
           temp = 0.0;
 
           totalStars += bars[i].rating;
@@ -211,8 +211,8 @@
         
         // account for price
         for(k = 0; k < bars.length; ++k) {
-          scores[k] += 0.4 * ((bars[k].price - avgPrice)/totalPrice);
-          sorted[k] += 0.4 * ((bars[k].price - avgPrice)/totalPrice);
+          scores[k] += 0.5 * ((bars[k].price - avgPrice)/totalPrice);
+          sorted[k] += 0.5 * ((bars[k].price - avgPrice)/totalPrice);
         }
         
 
