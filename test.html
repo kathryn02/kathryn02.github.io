@@ -83,6 +83,15 @@
     </table>
 
     <script type="text/javascript">
+      jQuery(document).ready(function($) {
+          jQuery.getScript('http://www.geoplugin.net/javascript.gp', function() 
+      {
+          var country = geoplugin_countryName();
+          var zone = geoplugin_region();
+          var district = geoplugin_city();
+          console.log("Your location is: " + country + ", " + zone + ", " + district);
+      });
+      });
 
       function search() {
         var auth = {
@@ -134,15 +143,7 @@
                   //      alert("Your location is: " + geoplugin_countryName() + ", " + geoplugin_region() + ", " + geoplugin_city());
                 //});
 
-                jQuery(document).ready(function($) {
-                    jQuery.getScript('http://www.geoplugin.net/javascript.gp', function() 
-                {
-                    var country = geoplugin_countryName();
-                    var zone = geoplugin_region();
-                    var district = geoplugin_city();
-                    console.log("Your location is: " + country + ", " + zone + ", " + district);
-                });
-                });
+                
                 //var rank = get_rank(info, 30.594659, -96.327024);
                 //position.coords.latitude
                 //position.coords.longitude
