@@ -140,8 +140,6 @@
                 var info = get_data(data.businesses);
                 //var locate = get_location();
                 var rank = get_rank(info, 30.594659, -96.327024);
-                //position.coords.latitude
-                //position.coords.longitude
                 
                 var place;
                 for(i = 0; i < rank.length; ++i) {
@@ -181,7 +179,7 @@
         var sorted = [];
         var totalStars = 0.0;
         var avgStars = 0.0;
-        var sumPrice = 0.0;
+        var totalPrice = 0.0;
         var avgPrice = 0.0;
 
         var data = [];
@@ -189,31 +187,32 @@
         // get difference in location
         var temp = 0.0;
         for(i = 0; i < bars.length; ++i) {
-          temp = Math.abs(currLat - bars[i].latitude);
-          temp += Math.abs(currLon - bars[i].longitude);
-          scores.push(Math.cos(1.0 - temp));
-          sorted.push(Math.cos(1.0 - temp));
+          // distance formula
+          temp = (currLat - bars[i].latitude) * (currLat - bars[i].latitude);
+          temp += (currLon - bars[i].longitude) * (currLon - bars[i].longitude);
+          scores.push(0.4 * Math.sqrt(temp));
+          sorted.push(0.4 * Math.sqrt(temp));
           temp = 0.0;
 
           totalStars += bars[i].rating;
-          sumPrice += bars[i].price;
+          totalPrice += bars[i].price;
         }
         avgStars = totalStars/bars.length;
-        avgPrice = sumPrice/bars.length;
+        avgPrice = totalPrice/bars.length;
 
         
         // take avg star rating and get relative value
         for(j = 0; j < bars.length; ++j) {
-          scores[j] += Math.cos((bars[j].rating - avgStars)/avgStars);
-          sorted[j] += Math.cos((bars[j].rating - avgStars)/avgStars);
+          scores[j] += Math.cos(0.2 * ((bars[j].rating - avgStars)/totalStars));
+          sorted[j] += Math.cos(0.2 * ((bars[j].rating - avgStars)/totalStars));
         }
         
 
         
         // account for price
         for(k = 0; k < bars.length; ++k) {
-          scores[k] += bars[k].price/avgPrice;
-          sorted[k] += bars[k].price/avgPrice;
+          scores[k] += 0.4 * ((bars[k].price - avgPrice)/totalPrice);
+          sorted[k] += 0.4 * ((bars[k].price - avgPrice)/totalPrice);
         }
         
 
@@ -264,6 +263,8 @@
       };
 
       function suc(pos) {
+        //position.coords.latitude
+        //position.coords.longitude
         var crd = pos.coords;
 
         console.log('Your current position is:');
